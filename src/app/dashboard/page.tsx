@@ -28,7 +28,7 @@ const containerVariants = {
       staggerChildren: 0.05,
     },
   },
-}
+} as const
 
 const itemVariants = {
   hidden: { opacity: 0, y: 10 },
@@ -37,10 +37,10 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.3,
-      ease: "easeOut",
+      ease: "easeOut" as const,
     },
   },
-}
+} as const
 
 export default function DashboardPage() {
   const { user, labParameters, stats, updateStats } = useAppStore()

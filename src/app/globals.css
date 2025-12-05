@@ -141,7 +141,7 @@
   --color-purple-800: var(--purple-800);
   --color-purple-900: var(--purple-900);
   --color-purple-950: var(--purple-950);
-}
+  }
 
 * {
   @apply border-border;

@@ -43,7 +43,7 @@ export default function HomeContent() {
         staggerChildren: 0.15,
       },
     },
-  }
+  } as const
 
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -52,10 +52,10 @@ export default function HomeContent() {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut",
+        ease: "easeOut" as const,
       },
     },
-  }
+  } as const
 
   return (
     <div className="relative min-h-screen overflow-hidden">
