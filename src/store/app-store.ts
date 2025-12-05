@@ -51,7 +51,10 @@ export const useAppStore = create<AppState>()(
       
       logout: async () => {
         try {
-          await fetch('/api/auth/logout', { method: 'POST' })
+          await fetch('/api/auth/logout', { 
+            method: 'POST',
+            credentials: 'include',
+          })
         } catch (error) {
           console.error('Logout error:', error)
         }
@@ -60,7 +63,13 @@ export const useAppStore = create<AppState>()(
       
       checkAuth: async () => {
         try {
-          const res = await fetch('/api/auth/me')
+          const res = await fetch('/api/auth/me', {
+            method: 'GET',
+            credentials: 'include', // Ensure cookies are sent
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
           if (res.ok) {
             const data = await res.json()
             set({ user: data.user })
@@ -113,6 +122,7 @@ export const useAppStore = create<AppState>()(
         try {
           const res = await fetch('/api/lab-parameters', {
             method: 'POST',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ parameters: params }),
           })
@@ -135,7 +145,10 @@ export const useAppStore = create<AppState>()(
 
         try {
           set({ isLoading: true })
-          const res = await fetch('/api/lab-parameters')
+          const res = await fetch('/api/lab-parameters', {
+            method: 'GET',
+            credentials: 'include',
+          })
           if (res.ok) {
             const data = await res.json()
             set({ labParameters: data.parameters })
@@ -152,7 +165,10 @@ export const useAppStore = create<AppState>()(
         const { user } = get()
         if (user) {
           try {
-            await fetch('/api/lab-parameters', { method: 'DELETE' })
+            await fetch('/api/lab-parameters', { 
+              method: 'DELETE',
+              credentials: 'include',
+            })
           } catch (error) {
             console.error('Clear parameters error:', error)
           }
