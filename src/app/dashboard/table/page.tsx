@@ -160,16 +160,25 @@ function MobileParameterCard({
 export default function TablePage() {
   const { labParameters } = useAppStore()
   const searchParams = useSearchParams()
-  const [searchQuery, setSearchQuery] = React.useState("")
   const [sortField, setSortField] = React.useState<keyof LabParameter>("testDate")
   const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">("desc")
   const [currentPage, setCurrentPage] = React.useState(1)
   
-  // Initialize status filter from URL params
+  // Initialize from URL params
   const urlStatus = searchParams.get("status")
+  const urlSearch = searchParams.get("search")
+  
   const [statusFilter, setStatusFilter] = React.useState<string>(
     urlStatus === "abnormal" ? "abnormal" : "all"
   )
+  const [searchQuery, setSearchQuery] = React.useState(urlSearch || "")
+  
+  // Update search when URL changes
+  React.useEffect(() => {
+    if (urlSearch) {
+      setSearchQuery(urlSearch)
+    }
+  }, [urlSearch])
 
   // Filter and sort data
   const filteredData = React.useMemo(() => {
