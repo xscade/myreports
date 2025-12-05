@@ -12,22 +12,24 @@ export async function GET(request: NextRequest) {
     const token = cookieStore.get('auth-token')?.value
 
     if (!token) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'Not authenticated - no token' },
-        { status: 401 },
-        { headers: { 'Cache-Control': 'no-store' } }
+        { status: 401 }
       )
+      response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+      return response
     }
 
     // Verify the token
     const payload = verifyToken(token)
     
     if (!payload) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'Not authenticated - invalid token' },
-        { status: 401 },
-        { headers: { 'Cache-Control': 'no-store' } }
+        { status: 401 }
       )
+      response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+      return response
     }
 
     const response = NextResponse.json({
