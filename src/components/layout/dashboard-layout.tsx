@@ -15,7 +15,7 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const router = useRouter()
-  const { checkAuth, user, fetchLabParameters, updateStats } = useAppStore()
+  const { checkAuth, user, fetchLabParameters, updateStats, setUser } = useAppStore()
   const [isChecking, setIsChecking] = useState(true)
   const hasCheckedAuth = useRef(false)
 
@@ -26,9 +26,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
     const verifyAuth = async () => {
       try {
+        // If we have a persisted user, validate with server
         const authenticatedUser = await checkAuth()
         
         if (!authenticatedUser) {
+          // Server says not authenticated - clear persisted user and redirect
+          setUser(null)
           router.replace("/")
           return
         }
@@ -38,7 +41,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         updateStats()
       } catch (error) {
         console.error('Auth verification failed:', error)
-        router.replace("/")
+        // On network error, if we have a persisted user, keep them logged in
+        // Only redirect if there's no user at all
+        if (!user) {
+          router.replace("/")
+        }
       } finally {
         setIsChecking(false)
       }
@@ -47,8 +54,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     verifyAuth()
   }, []) // Empty dependency array - only run once on mount
 
-  // Show loading while checking auth
-  if (isChecking) {
+  // Show loading only if we don't have a persisted user
+  if (isChecking && !user) {
     return (
       <div className="flex h-screen items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
@@ -64,7 +71,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   }
 
   // If no user after checking, don't render anything (will redirect)
-  if (!user) {
+  if (!isChecking && !user) {
     return null
   }
 

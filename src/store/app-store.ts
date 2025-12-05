@@ -231,7 +231,8 @@ export const useAppStore = create<AppState>()(
     {
       name: "medical-reports-storage",
       partialize: (state) => ({
-        // Only persist uploaded files locally, everything else from server
+        // Persist user and uploaded files locally
+        user: state.user,
         uploadedFiles: state.uploadedFiles,
       }),
     }
