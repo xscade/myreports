@@ -246,3 +246,49 @@ body {
   background-size: 200% 100%;
   animation: shimmer 2s ease-in-out infinite;
 }
+
+/* Safe Area Support for Mobile */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* Mobile Touch Optimizations */
+@media (max-width: 768px) {
+  /* Larger touch targets on mobile */
+  button, a, [role="button"] {
+    min-height: 44px;
+  }
+  
+  /* Hide scrollbar on mobile for cleaner look */
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+  
+  /* Prevent text selection on mobile for app-like feel */
+  .no-select {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+/* Pull to refresh visual indicator */
+.pull-indicator {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+}
+
+/* Active state for better mobile feedback */
+@media (hover: none) {
+  .card-hover:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease-out;
+  }
+}

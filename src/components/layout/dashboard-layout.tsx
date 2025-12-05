@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { Sidebar } from "./sidebar"
 import { Navbar } from "./navbar"
+import { BottomNav } from "./bottom-nav"
 import { useAppStore } from "@/store/app-store"
 
 interface DashboardLayoutProps {
@@ -14,7 +15,7 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const router = useRouter()
-  const { sidebarOpen, checkAuth, user, fetchLabParameters, updateStats } = useAppStore()
+  const { checkAuth, user, fetchLabParameters, updateStats } = useAppStore()
   const [isChecking, setIsChecking] = useState(true)
 
   useEffect(() => {
@@ -64,7 +65,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
-      <Sidebar />
+      {/* Sidebar - Hidden on mobile */}
+      <div className="hidden md:block">
+        <Sidebar />
+      </div>
+      
       <div className="flex flex-1 flex-col overflow-hidden">
         <Navbar />
         <AnimatePresence mode="wait">
@@ -74,12 +79,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             transition={{ duration: 0.3 }}
             className="flex-1 overflow-y-auto overflow-x-hidden gradient-purple-glow pattern-dots"
           >
-            <div className="container mx-auto p-4 lg:p-6">
+            {/* Add padding bottom for mobile bottom nav */}
+            <div className="container mx-auto p-4 pb-24 md:pb-6 lg:p-6">
               {children}
             </div>
           </motion.main>
         </AnimatePresence>
       </div>
+      
+      {/* Bottom Navigation - Only on mobile */}
+      <BottomNav />
     </div>
   )
 }
