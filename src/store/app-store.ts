@@ -66,8 +66,10 @@ export const useAppStore = create<AppState>()(
           const res = await fetch('/api/auth/me', {
             method: 'GET',
             credentials: 'include', // Ensure cookies are sent
+            cache: 'no-store', // Prevent caching
             headers: {
               'Content-Type': 'application/json',
+              'Cache-Control': 'no-cache',
             },
           })
           if (res.ok) {

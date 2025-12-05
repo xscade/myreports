@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { Sidebar } from "./sidebar"
@@ -17,8 +17,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const router = useRouter()
   const { checkAuth, user, fetchLabParameters, updateStats } = useAppStore()
   const [isChecking, setIsChecking] = useState(true)
+  const hasCheckedAuth = useRef(false)
 
   useEffect(() => {
+    // Only run auth check once
+    if (hasCheckedAuth.current) return
+    hasCheckedAuth.current = true
+
     const verifyAuth = async () => {
       try {
         const authenticatedUser = await checkAuth()
@@ -40,7 +45,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     }
 
     verifyAuth()
-  }, [checkAuth, fetchLabParameters, updateStats, router])
+  }, []) // Empty dependency array - only run once on mount
 
   // Show loading while checking auth
   if (isChecking) {
