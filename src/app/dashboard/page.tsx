@@ -57,6 +57,7 @@ export default function DashboardPage() {
       change: "+12%",
       trend: "up",
       color: "from-purple-500 to-purple-600",
+      href: "/dashboard/table",
     },
     {
       title: "Reports",
@@ -65,6 +66,7 @@ export default function DashboardPage() {
       change: "+5%",
       trend: "up",
       color: "from-blue-500 to-blue-600",
+      href: "/dashboard/upload",
     },
     {
       title: "Abnormal",
@@ -73,6 +75,7 @@ export default function DashboardPage() {
       change: "-3%",
       trend: "down",
       color: "from-orange-500 to-orange-600",
+      href: "/dashboard/table?status=abnormal",
     },
     {
       title: "Health Score",
@@ -84,6 +87,7 @@ export default function DashboardPage() {
       change: "+2%",
       trend: "up",
       color: "from-green-500 to-green-600",
+      href: "/dashboard/analytics",
     },
   ]
 
@@ -137,45 +141,48 @@ export default function DashboardPage() {
             key={stat.title}
             variants={itemVariants}
             whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             transition={{ duration: 0.2 }}
           >
-            <Card className="card-hover overflow-hidden">
-              <CardContent className="p-3 sm:p-4 md:p-6">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="space-y-0.5 md:space-y-1 min-w-0 flex-1">
-                    <p className="text-xs md:text-sm font-medium text-muted-foreground truncate">
-                      {stat.title}
-                    </p>
-                    <p className="text-xl sm:text-2xl md:text-3xl font-bold">
-                      {stat.value}
-                      {stat.suffix}
-                    </p>
+            <Link href={stat.href}>
+              <Card className="card-hover overflow-hidden cursor-pointer active:scale-[0.98] transition-transform">
+                <CardContent className="p-3 sm:p-4 md:p-6">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="space-y-0.5 md:space-y-1 min-w-0 flex-1">
+                      <p className="text-xs md:text-sm font-medium text-muted-foreground truncate">
+                        {stat.title}
+                      </p>
+                      <p className="text-xl sm:text-2xl md:text-3xl font-bold">
+                        {stat.value}
+                        {stat.suffix}
+                      </p>
+                    </div>
+                    <div
+                      className={`flex h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-lg md:rounded-xl bg-gradient-to-br ${stat.color} shadow-lg`}
+                    >
+                      <stat.icon className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
+                    </div>
                   </div>
-                  <div
-                    className={`flex h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-lg md:rounded-xl bg-gradient-to-br ${stat.color} shadow-lg`}
-                  >
-                    <stat.icon className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
+                  <div className="mt-2 md:mt-4 flex items-center gap-1 md:gap-2">
+                    {stat.trend === "up" ? (
+                      <ArrowUpRight className="h-3 w-3 md:h-4 md:w-4 text-green-500" />
+                    ) : (
+                      <ArrowDownRight className="h-3 w-3 md:h-4 md:w-4 text-red-500" />
+                    )}
+                    <span
+                      className={`text-xs md:text-sm font-medium ${
+                        stat.trend === "up" ? "text-green-500" : "text-red-500"
+                      }`}
+                    >
+                      {stat.change}
+                    </span>
+                    <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline">
+                      from last month
+                    </span>
                   </div>
-                </div>
-                <div className="mt-2 md:mt-4 flex items-center gap-1 md:gap-2">
-                  {stat.trend === "up" ? (
-                    <ArrowUpRight className="h-3 w-3 md:h-4 md:w-4 text-green-500" />
-                  ) : (
-                    <ArrowDownRight className="h-3 w-3 md:h-4 md:w-4 text-red-500" />
-                  )}
-                  <span
-                    className={`text-xs md:text-sm font-medium ${
-                      stat.trend === "up" ? "text-green-500" : "text-red-500"
-                    }`}
-                  >
-                    {stat.change}
-                  </span>
-                  <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline">
-                    from last month
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </Link>
           </motion.div>
         ))}
       </motion.div>
