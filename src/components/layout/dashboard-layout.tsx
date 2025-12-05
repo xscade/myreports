@@ -64,30 +64,45 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      {/* Sidebar - Hidden on mobile */}
-      <div className="hidden md:block">
-        <Sidebar />
-      </div>
-      
-      <div className="flex flex-1 flex-col overflow-hidden">
+    <div className="h-screen bg-background">
+      {/* Fixed Header on Mobile */}
+      <div className="fixed top-0 left-0 right-0 z-40 md:hidden">
         <Navbar />
-        <AnimatePresence mode="wait">
-          <motion.main
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="flex-1 overflow-y-auto overflow-x-hidden gradient-purple-glow pattern-dots"
-          >
-            {/* Add padding bottom for mobile bottom nav */}
-            <div className="container mx-auto p-4 pb-24 md:pb-6 lg:p-6">
-              {children}
-            </div>
-          </motion.main>
-        </AnimatePresence>
       </div>
       
-      {/* Bottom Navigation - Only on mobile */}
+      <div className="flex h-full">
+        {/* Sidebar - Hidden on mobile */}
+        <div className="hidden md:block">
+          <Sidebar />
+        </div>
+        
+        <div className="flex flex-1 flex-col min-h-0">
+          {/* Desktop Navbar - Not fixed, flows with content */}
+          <div className="hidden md:block">
+            <Navbar />
+          </div>
+          
+          {/* Main Content - Scrollable */}
+          <AnimatePresence mode="wait">
+            <motion.main
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="flex-1 overflow-y-auto overflow-x-hidden gradient-purple-glow pattern-dots"
+            >
+              {/* 
+                Mobile: pt-16 for fixed header, pb-20 for bottom nav
+                Desktop: normal padding 
+              */}
+              <div className="container mx-auto p-4 pt-[72px] pb-24 md:pt-4 md:pb-6 lg:p-6">
+                {children}
+              </div>
+            </motion.main>
+          </AnimatePresence>
+        </div>
+      </div>
+      
+      {/* Bottom Navigation - Fixed on mobile */}
       <BottomNav />
     </div>
   )

@@ -169,7 +169,7 @@ export default function UploadPage() {
       <div className="space-y-1">
         <h1 className="text-3xl font-bold tracking-tight">Upload Reports</h1>
         <p className="text-muted-foreground">
-          Upload medical documents to extract lab parameters using Google Gemini AI
+          Upload medical documents to extract lab parameters using Xscade AI
         </p>
       </div>
 
@@ -219,7 +219,7 @@ export default function UploadPage() {
                 AI Document Extraction
               </CardTitle>
               <CardDescription>
-                Upload up to {MAX_IMAGES} images (PNG/JPG) and {MAX_PDFS} PDFs - Powered by Google Gemini
+                Upload up to {MAX_IMAGES} images (PNG/JPG) and {MAX_PDFS} PDFs - Powered by Xscade AI
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -362,7 +362,7 @@ export default function UploadPage() {
                 >
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">
-                      Analyzing with Gemini AI...
+                      Analyzing with Xscade AI...
                     </span>
                     <span className="font-medium">{Math.round(extractionProgress)}%</span>
                   </div>
@@ -381,7 +381,7 @@ export default function UploadPage() {
                   {isExtracting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Analyzing with Gemini...
+                      Analyzing with Xscade AI...
                     </>
                   ) : (
                     <>
@@ -412,7 +412,7 @@ export default function UploadPage() {
             <CardContent className="space-y-4">
               {[
                 { step: 1, title: "Upload Documents", desc: "Drag & drop medical reports" },
-                { step: 2, title: "Gemini AI Analysis", desc: "AI extracts lab values" },
+                { step: 2, title: "Xscade AI Analysis", desc: "AI extracts lab values" },
                 { step: 3, title: "View Results", desc: "Review extracted data in table" },
                 { step: 4, title: "Track Trends", desc: "Visualize with analytics" },
               ].map((item, index) => (
@@ -500,12 +500,12 @@ export default function UploadPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-purple-500" />
-                Powered by Gemini
+                Powered by Xscade
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Using Google&apos;s Gemini 1.5 Flash model for accurate medical document analysis and lab parameter extraction.
+                Using Xscade&apos;s Medical Grade AI model for accurate medical document analysis and lab parameter extraction.
               </p>
             </CardContent>
           </Card>

@@ -38,8 +38,8 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange={false}
-        >
-          {children}
+      >
+        {children}
         </ThemeProvider>
       </body>
     </html>

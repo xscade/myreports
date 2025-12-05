@@ -24,11 +24,11 @@ export function Navbar() {
     <motion.header
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="sticky top-0 z-30 flex h-14 md:h-16 items-center gap-2 md:gap-4 border-b border-border bg-background/80 px-3 md:px-4 backdrop-blur-lg lg:px-6"
+      className="flex h-14 md:h-16 items-center gap-2 md:gap-4 border-b border-border bg-background/95 px-3 md:px-4 backdrop-blur-lg lg:px-6 safe-area-top"
     >
       {/* Mobile Logo */}
       <div className="flex items-center gap-2 md:hidden">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-purple-700">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-purple-700 shadow-lg shadow-purple-500/20">
           <FileHeart className="h-4 w-4 text-white" />
         </div>
         <span className="font-semibold text-sm">MedReports</span>
