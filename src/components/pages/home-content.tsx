@@ -103,24 +103,30 @@ export default function HomeContent() {
       {/* Content */}
       <div className="relative z-10 flex min-h-screen flex-col">
         {/* Header */}
-        <header className="flex items-center justify-between px-6 py-4 lg:px-12">
+        <header className="flex items-center justify-between px-4 py-4 sm:px-6 lg:px-12">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-3"
+            className="flex items-center gap-2 sm:gap-3"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-700 shadow-lg shadow-purple-500/30">
               <FileHeart className="h-5 w-5 text-white" />
             </div>
-            <span className="text-xl font-bold">MedReports AI</span>
+            <span className="text-lg font-bold sm:text-xl">MedReports AI</span>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
           >
-            <Button variant="wednesday" onClick={() => router.push("/login")}>
-              Get Started
-              <ArrowRight className="ml-2 h-4 w-4" />
+            {/* Show icon only on mobile, full button on larger screens */}
+            <Button 
+              variant="wednesday" 
+              onClick={() => router.push("/login")}
+              className="sm:px-4"
+              size="sm"
+            >
+              <span className="hidden sm:inline">Get Started</span>
+              <ArrowRight className="h-4 w-4 sm:ml-2" />
             </Button>
           </motion.div>
         </header>
