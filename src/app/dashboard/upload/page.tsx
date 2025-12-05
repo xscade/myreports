@@ -281,8 +281,8 @@ export default function UploadPage() {
                             )}
                           </div>
 
-                          {/* File Info - Flexible width */}
-                          <div className="flex-1 min-w-0 overflow-hidden">
+                          {/* File Info - Fixed max width with truncation */}
+                          <div className="min-w-0 max-w-[120px] sm:max-w-[200px] md:max-w-none md:flex-1">
                             <p className="text-xs md:text-sm font-medium truncate">{file.file.name}</p>
                             <p className="text-[10px] md:text-xs text-muted-foreground">
                               {(file.file.size / 1024).toFixed(1)} KB
