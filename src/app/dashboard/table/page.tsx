@@ -134,58 +134,65 @@ export default function TablePage() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-6"
+      className="space-y-4 md:space-y-6"
     >
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight">Data Table</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Data Table</h1>
+          <p className="text-sm md:text-base text-muted-foreground">
             View and manage all extracted lab parameters
           </p>
         </div>
         <div className="flex gap-2">
           <Link href="/dashboard/upload">
-            <Button variant="outline">
-              <Upload className="mr-2 h-4 w-4" />
-              Upload More
+            <Button variant="outline" size="sm" className="h-9">
+              <Upload className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Upload More</span>
             </Button>
           </Link>
-          <Button variant="wednesday" onClick={exportToCSV} disabled={filteredData.length === 0}>
-            <Download className="mr-2 h-4 w-4" />
-            Export CSV
+          <Button variant="wednesday" size="sm" className="h-9" onClick={exportToCSV} disabled={filteredData.length === 0}>
+            <Download className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Export CSV</span>
           </Button>
         </div>
       </div>
 
       {labParameters.length > 0 ? (
         <Card>
-          <CardHeader>
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <CardTitle>Lab Parameters</CardTitle>
-                <CardDescription>
-                  {filteredData.length} of {labParameters.length} parameters
-                </CardDescription>
+          <CardHeader className="pb-3">
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-lg md:text-xl">Lab Parameters</CardTitle>
+                  <CardDescription className="text-xs md:text-sm">
+                    {filteredData.length} of {labParameters.length} parameters
+                  </CardDescription>
+                </div>
+                {statusFilter !== "all" && (
+                  <Badge variant="secondary" className="text-xs">
+                    {statusFilter}
+                  </Badge>
+                )}
               </div>
 
-              {/* Filters */}
+              {/* Filters - Full width on mobile */}
               <div className="flex gap-2">
-                <div className="relative">
+                <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
-                    placeholder="Search parameters..."
+                    placeholder="Search..."
                     value={searchQuery}
                     onChange={(e) => {
                       setSearchQuery(e.target.value)
                       setCurrentPage(1)
                     }}
-                    className="w-[200px] pl-9"
+                    className="w-full pl-9 h-9 text-sm"
                   />
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="icon">
+                    <Button variant="outline" size="icon" className="h-9 w-9 shrink-0">
                       <Filter className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
@@ -209,13 +216,43 @@ export default function TablePage() {
               </div>
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="rounded-lg border">
+          <CardContent className="px-3 md:px-6">
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-3">
+              {paginatedData.map((item, index) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.03 }}
+                  className="rounded-lg border p-3 space-y-2"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium text-sm truncate">{item.parameterName}</p>
+                      <p className="text-xs text-muted-foreground">{formatDate(item.testDate)}</p>
+                    </div>
+                    {getStatusBadge(item.status)}
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">Value</span>
+                    <span className="font-semibold">{item.value} {item.unit}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">Normal Range</span>
+                    <span className="text-xs">{item.normalRange}</span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Desktop Table View */}
+            <div className="hidden md:block rounded-lg border overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow className="bg-muted/50">
                     <TableHead
-                      className="cursor-pointer hover:text-foreground"
+                      className="cursor-pointer hover:text-foreground whitespace-nowrap"
                       onClick={() => handleSort("parameterName")}
                     >
                       <div className="flex items-center gap-1">
@@ -224,7 +261,7 @@ export default function TablePage() {
                       </div>
                     </TableHead>
                     <TableHead
-                      className="cursor-pointer hover:text-foreground"
+                      className="cursor-pointer hover:text-foreground whitespace-nowrap"
                       onClick={() => handleSort("value")}
                     >
                       <div className="flex items-center gap-1">
@@ -232,10 +269,10 @@ export default function TablePage() {
                         <ArrowUpDown className="h-4 w-4" />
                       </div>
                     </TableHead>
-                    <TableHead>Unit</TableHead>
-                    <TableHead>Normal Range</TableHead>
+                    <TableHead className="whitespace-nowrap">Unit</TableHead>
+                    <TableHead className="whitespace-nowrap">Normal Range</TableHead>
                     <TableHead
-                      className="cursor-pointer hover:text-foreground"
+                      className="cursor-pointer hover:text-foreground whitespace-nowrap"
                       onClick={() => handleSort("status")}
                     >
                       <div className="flex items-center gap-1">
@@ -244,7 +281,7 @@ export default function TablePage() {
                       </div>
                     </TableHead>
                     <TableHead
-                      className="cursor-pointer hover:text-foreground"
+                      className="cursor-pointer hover:text-foreground whitespace-nowrap"
                       onClick={() => handleSort("testDate")}
                     >
                       <div className="flex items-center gap-1">
@@ -252,7 +289,7 @@ export default function TablePage() {
                         <ArrowUpDown className="h-4 w-4" />
                       </div>
                     </TableHead>
-                    <TableHead>Source</TableHead>
+                    <TableHead className="whitespace-nowrap">Source</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -289,11 +326,11 @@ export default function TablePage() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-between pt-4">
-                <p className="text-sm text-muted-foreground">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4">
+                <p className="text-xs sm:text-sm text-muted-foreground text-center sm:text-left">
                   Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1} to{" "}
                   {Math.min(currentPage * ITEMS_PER_PAGE, filteredData.length)} of{" "}
-                  {filteredData.length} results
+                  {filteredData.length}
                 </p>
                 <div className="flex gap-2">
                   <Button
@@ -301,17 +338,22 @@ export default function TablePage() {
                     size="sm"
                     onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                     disabled={currentPage === 1}
+                    className="h-8"
                   >
                     <ChevronLeft className="h-4 w-4" />
-                    Previous
+                    <span className="hidden sm:inline ml-1">Previous</span>
                   </Button>
+                  <div className="flex items-center px-2 text-sm text-muted-foreground">
+                    {currentPage} / {totalPages}
+                  </div>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                     disabled={currentPage === totalPages}
+                    className="h-8"
                   >
-                    Next
+                    <span className="hidden sm:inline mr-1">Next</span>
                     <ChevronRight className="h-4 w-4" />
                   </Button>
                 </div>
@@ -321,12 +363,12 @@ export default function TablePage() {
         </Card>
       ) : (
         <Card>
-          <CardContent className="flex flex-col items-center justify-center py-16">
-            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
-              <FileText className="h-8 w-8 text-muted-foreground" />
+          <CardContent className="flex flex-col items-center justify-center py-12 md:py-16 px-4">
+            <div className="mb-4 flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-full bg-muted">
+              <FileText className="h-7 w-7 md:h-8 md:w-8 text-muted-foreground" />
             </div>
-            <h3 className="text-lg font-semibold">No data yet</h3>
-            <p className="mt-1 text-center text-muted-foreground">
+            <h3 className="text-base md:text-lg font-semibold">No data yet</h3>
+            <p className="mt-1 text-center text-sm text-muted-foreground">
               Upload medical reports to extract and view lab parameters
             </p>
             <Link href="/dashboard/upload" className="mt-6">

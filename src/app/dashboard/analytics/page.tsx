@@ -99,42 +99,48 @@ function ParameterCard({ paramData, isExpanded, onToggle }: {
       <Card className={`transition-all duration-300 ${isExpanded ? 'ring-2 ring-purple-500/50' : 'hover:shadow-lg'}`}>
         {/* Header - Always visible */}
         <div 
-          className="flex items-center justify-between p-4 cursor-pointer hover:bg-muted/50 transition-colors"
+          className="flex items-center justify-between p-3 md:p-4 cursor-pointer hover:bg-muted/50 transition-colors"
           onClick={onToggle}
         >
-          <div className="flex items-center gap-4">
-            <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${
+          <div className="flex items-center gap-2 md:gap-4 min-w-0 flex-1">
+            <div className={`flex h-10 w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-xl ${
               trend === "up" ? "bg-orange-500/10" : trend === "down" ? "bg-blue-500/10" : "bg-green-500/10"
             }`}>
-              <TrendingUp className={`h-6 w-6 ${
+              <TrendingUp className={`h-5 w-5 md:h-6 md:w-6 ${
                 trend === "up" ? "text-orange-500 rotate-0" : 
                 trend === "down" ? "text-blue-500 rotate-180" : 
                 "text-green-500"
               }`} />
             </div>
-            <div>
-              <h3 className="font-semibold text-lg">{paramData.parameterName}</h3>
-              <p className="text-sm text-muted-foreground">
+            <div className="min-w-0 flex-1">
+              <h3 className="font-semibold text-sm md:text-lg truncate">{paramData.parameterName}</h3>
+              <p className="text-xs md:text-sm text-muted-foreground">
                 {paramData.data.length} readings • {paramData.unit}
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="text-right">
-              <p className="text-2xl font-bold">{latestValue || "—"}</p>
-              <p className="text-xs text-muted-foreground">Latest value</p>
+          <div className="flex items-center gap-2 md:gap-4 shrink-0">
+            <div className="text-right hidden sm:block">
+              <p className="text-lg md:text-2xl font-bold">{latestValue || "—"}</p>
+              <p className="text-xs text-muted-foreground">Latest</p>
             </div>
-            <Badge variant={
-              latestValue && max && latestValue > max ? "error" :
-              latestValue && min && latestValue < min ? "info" : "success"
-            }>
-              {latestValue && max && latestValue > max ? "High" :
-               latestValue && min && latestValue < min ? "Low" : "Normal"}
+            <Badge 
+              variant={
+                latestValue && max && latestValue > max ? "error" :
+                latestValue && min && latestValue < min ? "info" : "success"
+              }
+              className="text-[10px] px-2 py-0.5 md:text-xs md:px-2.5 md:py-1"
+            >
+              <span className="sm:hidden">{latestValue || "—"}</span>
+              <span className="hidden sm:inline">
+                {latestValue && max && latestValue > max ? "High" :
+                 latestValue && min && latestValue < min ? "Low" : "Normal"}
+              </span>
             </Badge>
             {isExpanded ? (
-              <ChevronUp className="h-5 w-5 text-muted-foreground" />
+              <ChevronUp className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
             ) : (
-              <ChevronDown className="h-5 w-5 text-muted-foreground" />
+              <ChevronDown className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
             )}
           </div>
         </div>
@@ -148,23 +154,23 @@ function ParameterCard({ paramData, isExpanded, onToggle }: {
             transition={{ duration: 0.3 }}
             className="border-t"
           >
-            <CardContent className="pt-4">
-              <div className="mb-4 flex items-center justify-between">
-                <p className="text-sm text-muted-foreground">
+            <CardContent className="pt-4 px-3 md:px-6">
+              <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <p className="text-xs md:text-sm text-muted-foreground">
                   Normal Range: <span className="font-medium text-foreground">{paramData.normalRange}</span>
                 </p>
-                <Badge variant="secondary">
+                <Badge variant="secondary" className="w-fit text-xs">
                   {paramData.data.length} data points
                 </Badge>
               </div>
-              <div className="h-[300px] w-full">
+              <div className="h-[200px] md:h-[300px] w-full -ml-2 md:ml-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart
                     data={paramData.data.map((d) => ({
                       ...d,
                       unit: paramData.unit,
                     }))}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                    margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
                   >
                     <defs>
                       <linearGradient id={`gradient-${paramData.parameterName}`} x1="0" y1="0" x2="0" y2="1">
@@ -175,13 +181,15 @@ function ParameterCard({ paramData, isExpanded, onToggle }: {
                     <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                     <XAxis
                       dataKey="formattedDate"
-                      tick={{ fontSize: 12 }}
+                      tick={{ fontSize: 10 }}
                       className="text-muted-foreground"
+                      interval="preserveStartEnd"
                     />
                     <YAxis
-                      tick={{ fontSize: 12 }}
+                      tick={{ fontSize: 10 }}
                       className="text-muted-foreground"
                       domain={["auto", "auto"]}
+                      width={35}
                     />
                     <Tooltip content={<CustomTooltip />} />
                     {min !== null && (
@@ -193,7 +201,7 @@ function ParameterCard({ paramData, isExpanded, onToggle }: {
                           value: "Min",
                           position: "left",
                           fill: "#22c55e",
-                          fontSize: 10,
+                          fontSize: 9,
                         }}
                       />
                     )}
@@ -206,7 +214,7 @@ function ParameterCard({ paramData, isExpanded, onToggle }: {
                           value: "Max",
                           position: "left",
                           fill: "#ef4444",
-                          fontSize: 10,
+                          fontSize: 9,
                         }}
                       />
                     )}
@@ -215,7 +223,7 @@ function ParameterCard({ paramData, isExpanded, onToggle }: {
                       dataKey="value"
                       name={paramData.parameterName}
                       stroke="#7c3aed"
-                      strokeWidth={3}
+                      strokeWidth={2}
                       fill={`url(#gradient-${paramData.parameterName})`}
                     />
                     <Line
@@ -223,14 +231,14 @@ function ParameterCard({ paramData, isExpanded, onToggle }: {
                       dataKey="value"
                       name={paramData.parameterName}
                       stroke="#7c3aed"
-                      strokeWidth={3}
+                      strokeWidth={2}
                       dot={{
                         fill: "#7c3aed",
                         strokeWidth: 2,
-                        r: 6,
+                        r: 4,
                       }}
                       activeDot={{
-                        r: 8,
+                        r: 6,
                         fill: "#7c3aed",
                         stroke: "#fff",
                         strokeWidth: 2,
@@ -241,12 +249,12 @@ function ParameterCard({ paramData, isExpanded, onToggle }: {
               </div>
               {/* Data History */}
               <div className="mt-4 pt-4 border-t">
-                <p className="text-sm font-medium mb-2">History</p>
-                <div className="flex flex-wrap gap-2">
+                <p className="text-xs md:text-sm font-medium mb-2">History</p>
+                <div className="flex flex-wrap gap-1.5 md:gap-2">
                   {paramData.data.slice().reverse().map((point, idx) => (
                     <div 
                       key={idx} 
-                      className="flex items-center gap-2 rounded-lg bg-muted/50 px-3 py-1.5 text-sm"
+                      className="flex items-center gap-1.5 rounded-lg bg-muted/50 px-2 py-1 md:px-3 md:py-1.5 text-xs md:text-sm"
                     >
                       <span className="text-muted-foreground">{point.formattedDate}:</span>
                       <span className="font-medium">{point.value}</span>
@@ -328,22 +336,22 @@ export default function AnalyticsPage() {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="space-y-6"
+      className="space-y-4 md:space-y-6"
     >
       {/* Header */}
-      <motion.div variants={itemVariants} className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <motion.div variants={itemVariants} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight">Analytics</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Analytics</h1>
+          <p className="text-sm md:text-base text-muted-foreground">
             Visualize trends and patterns in your lab parameters
           </p>
         </div>
         {chartDataByParameter.length > 0 && (
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={expandAll}>
+            <Button variant="outline" size="sm" className="h-8 text-xs" onClick={expandAll}>
               Expand All
             </Button>
-            <Button variant="outline" size="sm" onClick={collapseAll}>
+            <Button variant="outline" size="sm" className="h-8 text-xs" onClick={collapseAll}>
               Collapse All
             </Button>
           </div>
@@ -353,37 +361,37 @@ export default function AnalyticsPage() {
       {labParameters.length > 0 ? (
         <>
           {/* Overview Stats */}
-          <motion.div variants={itemVariants} className="grid gap-4 md:grid-cols-3">
+          <motion.div variants={itemVariants} className="grid gap-3 grid-cols-3">
             <Card className="card-hover">
-              <CardContent className="flex items-center gap-4 p-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/10">
-                  <Activity className="h-6 w-6 text-purple-500" />
+              <CardContent className="flex flex-col md:flex-row items-center gap-2 md:gap-4 p-3 md:p-6">
+                <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-xl bg-purple-500/10">
+                  <Activity className="h-5 w-5 md:h-6 md:w-6 text-purple-500" />
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Parameters Tracked</p>
-                  <p className="text-2xl font-bold">{chartDataByParameter.length}</p>
+                <div className="text-center md:text-left">
+                  <p className="text-[10px] md:text-sm text-muted-foreground">Tracked</p>
+                  <p className="text-lg md:text-2xl font-bold">{chartDataByParameter.length}</p>
                 </div>
               </CardContent>
             </Card>
             <Card className="card-hover">
-              <CardContent className="flex items-center gap-4 p-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10">
-                  <TrendingUp className="h-6 w-6 text-blue-500" />
+              <CardContent className="flex flex-col md:flex-row items-center gap-2 md:gap-4 p-3 md:p-6">
+                <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-xl bg-blue-500/10">
+                  <TrendingUp className="h-5 w-5 md:h-6 md:w-6 text-blue-500" />
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Total Data Points</p>
-                  <p className="text-2xl font-bold">{labParameters.length}</p>
+                <div className="text-center md:text-left">
+                  <p className="text-[10px] md:text-sm text-muted-foreground">Data Points</p>
+                  <p className="text-lg md:text-2xl font-bold">{labParameters.length}</p>
                 </div>
               </CardContent>
             </Card>
             <Card className="card-hover">
-              <CardContent className="flex items-center gap-4 p-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/10">
-                  <LineChartIcon className="h-6 w-6 text-green-500" />
+              <CardContent className="flex flex-col md:flex-row items-center gap-2 md:gap-4 p-3 md:p-6">
+                <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-xl bg-green-500/10">
+                  <LineChartIcon className="h-5 w-5 md:h-6 md:w-6 text-green-500" />
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Charts Available</p>
-                  <p className="text-2xl font-bold">{chartDataByParameter.length}</p>
+                <div className="text-center md:text-left">
+                  <p className="text-[10px] md:text-sm text-muted-foreground">Charts</p>
+                  <p className="text-lg md:text-2xl font-bold">{chartDataByParameter.length}</p>
                 </div>
               </CardContent>
             </Card>
@@ -392,13 +400,13 @@ export default function AnalyticsPage() {
           {/* Parameter Cards - Sub Dashboard Style */}
           <motion.div variants={itemVariants}>
             <Card>
-              <CardHeader>
-                <CardTitle>Parameter Trends</CardTitle>
-                <CardDescription>
-                  Click on any parameter to expand and view detailed trends
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg md:text-xl">Parameter Trends</CardTitle>
+                <CardDescription className="text-xs md:text-sm">
+                  Tap on any parameter to expand and view detailed trends
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3 px-3 md:px-6">
                 {chartDataByParameter.map((paramData) => (
                   <ParameterCard
                     key={paramData.parameterName}
@@ -414,14 +422,14 @@ export default function AnalyticsPage() {
           {/* Quick Comparison Grid - Show ALL parameters */}
           <motion.div variants={itemVariants}>
             <Card>
-              <CardHeader>
-                <CardTitle>All Parameters Overview</CardTitle>
-                <CardDescription>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg md:text-xl">All Parameters Overview</CardTitle>
+                <CardDescription className="text-xs md:text-sm">
                   Quick view of all {chartDataByParameter.length} tracked parameters
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <CardContent className="px-3 md:px-6">
+                <div className="grid gap-3 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {chartDataByParameter.map((paramData, index) => {
                     const latestValue = paramData.data[paramData.data.length - 1]?.value
                     const { min, max } = parseNormalRange(paramData.normalRange)
@@ -432,23 +440,23 @@ export default function AnalyticsPage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.03 }}
-                        className="rounded-xl border p-4 hover:shadow-md transition-shadow cursor-pointer"
+                        className="rounded-xl border p-3 md:p-4 hover:shadow-md transition-shadow cursor-pointer"
                         onClick={() => toggleExpand(paramData.parameterName)}
                       >
-                        <div className="flex items-center justify-between mb-3">
-                          <h4 className="font-medium text-sm truncate flex-1">{paramData.parameterName}</h4>
+                        <div className="flex items-start justify-between gap-1 mb-2 md:mb-3">
+                          <h4 className="font-medium text-xs md:text-sm truncate flex-1 leading-tight">{paramData.parameterName}</h4>
                           <Badge 
                             variant={
                               latestValue && max && latestValue > max ? "error" :
                               latestValue && min && latestValue < min ? "info" : "success"
                             }
-                            className="ml-2 text-xs"
+                            className="text-[10px] px-1.5 py-0 md:text-xs md:px-2 shrink-0"
                           >
                             {latestValue && max && latestValue > max ? "H" :
                              latestValue && min && latestValue < min ? "L" : "N"}
                           </Badge>
                         </div>
-                        <div className="h-[80px]">
+                        <div className="h-[60px] md:h-[80px]">
                           <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={paramData.data}>
                               <Line
@@ -461,9 +469,9 @@ export default function AnalyticsPage() {
                             </LineChart>
                           </ResponsiveContainer>
                         </div>
-                        <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
-                          <span>{paramData.data.length} readings</span>
-                          <span className="font-medium text-foreground">
+                        <div className="mt-1.5 md:mt-2 flex items-center justify-between text-[10px] md:text-xs text-muted-foreground">
+                          <span>{paramData.data.length} pts</span>
+                          <span className="font-medium text-foreground truncate ml-1">
                             {latestValue} {paramData.unit}
                           </span>
                         </div>
@@ -478,12 +486,12 @@ export default function AnalyticsPage() {
       ) : (
         <motion.div variants={itemVariants}>
           <Card>
-            <CardContent className="flex flex-col items-center justify-center py-16">
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
-                <LineChartIcon className="h-8 w-8 text-muted-foreground" />
+            <CardContent className="flex flex-col items-center justify-center py-12 md:py-16 px-4">
+              <div className="mb-4 flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-full bg-muted">
+                <LineChartIcon className="h-7 w-7 md:h-8 md:w-8 text-muted-foreground" />
               </div>
-              <h3 className="text-lg font-semibold">No data to visualize</h3>
-              <p className="mt-1 text-center text-muted-foreground">
+              <h3 className="text-base md:text-lg font-semibold">No data to visualize</h3>
+              <p className="mt-1 text-center text-sm text-muted-foreground">
                 Upload medical reports to see trend analysis and charts
               </p>
               <Link href="/dashboard/upload" className="mt-6">
