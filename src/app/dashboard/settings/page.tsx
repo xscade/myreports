@@ -61,7 +61,7 @@ export default function SettingsPage() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Profile Settings */}
-        <motion.div variants={itemVariants} className="lg:col-span-2">
+        <motion.div variants={itemVariants} className="lg:col-span-2" id="profile">
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
