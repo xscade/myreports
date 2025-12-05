@@ -163,13 +163,13 @@ export default function UploadPage() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-6"
+      className="space-y-4 md:space-y-6"
     >
       {/* Header */}
       <div className="space-y-1">
-        <h1 className="text-3xl font-bold tracking-tight">Upload Reports</h1>
-        <p className="text-muted-foreground">
-          Upload medical documents to extract lab parameters using Xscade AI
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">Upload Reports</h1>
+        <p className="text-sm md:text-base text-muted-foreground">
+          Extract lab parameters using Xscade AI
         </p>
       </div>
 
@@ -180,28 +180,14 @@ export default function UploadPage() {
           animate={{ opacity: 1, y: 0 }}
         >
           <Card className="border-yellow-500/50 bg-yellow-500/10">
-            <CardContent className="flex items-start gap-3 pt-6">
+            <CardContent className="flex items-start gap-3 p-4 md:pt-6">
               <AlertTriangle className="h-5 w-5 text-yellow-500 shrink-0 mt-0.5" />
-              <div>
-                <p className="font-medium text-yellow-600 dark:text-yellow-400">
-                  Gemini API Key Not Configured
+              <div className="min-w-0">
+                <p className="font-medium text-yellow-600 dark:text-yellow-400 text-sm md:text-base">
+                  API Key Not Configured
                 </p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Please create a <code className="bg-muted px-1 py-0.5 rounded">.env.local</code> file in your project root with:
-                </p>
-                <pre className="mt-2 bg-muted p-2 rounded text-xs">
-                  GEMINI_API_KEY=your_api_key_here
-                </pre>
-                <p className="text-sm text-muted-foreground mt-2">
-                  Get your API key from{" "}
-                  <a 
-                    href="https://aistudio.google.com/app/apikey" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-purple-600 hover:underline"
-                  >
-                    Google AI Studio
-                  </a>
+                <p className="text-xs md:text-sm text-muted-foreground mt-1">
+                  Add <code className="bg-muted px-1 py-0.5 rounded text-xs">GEMINI_API_KEY</code> to .env.local
                 </p>
               </div>
             </CardContent>
@@ -209,24 +195,25 @@ export default function UploadPage() {
         </motion.div>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      {/* Main Content - Stack on mobile, grid on desktop */}
+      <div className="space-y-4 lg:grid lg:grid-cols-3 lg:gap-6 lg:space-y-0">
         {/* Upload Area */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-4 md:space-y-6">
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-purple-500" />
+            <CardHeader className="p-4 md:p-6">
+              <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+                <Sparkles className="h-4 w-4 md:h-5 md:w-5 text-purple-500" />
                 AI Document Extraction
               </CardTitle>
-              <CardDescription>
-                Upload up to {MAX_IMAGES} images (PNG/JPG) and {MAX_PDFS} PDFs - Powered by Xscade AI
+              <CardDescription className="text-xs md:text-sm">
+                Upload up to {MAX_IMAGES} images and {MAX_PDFS} PDFs
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="p-4 md:p-6 pt-0 md:pt-0 space-y-4 md:space-y-6">
               {/* Dropzone */}
               <div
                 {...getRootProps()}
-                className={`relative cursor-pointer rounded-xl border-2 border-dashed p-8 text-center transition-all duration-200 ${
+                className={`relative cursor-pointer rounded-xl border-2 border-dashed p-6 md:p-8 text-center transition-all duration-200 ${
                   isDragActive
                     ? "border-purple-500 bg-purple-500/5"
                     : "border-border hover:border-purple-500/50 hover:bg-purple-500/5"
@@ -237,36 +224,36 @@ export default function UploadPage() {
                   animate={isDragActive ? { scale: 1.05 } : { scale: 1 }}
                   className="flex flex-col items-center"
                 >
-                  <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-purple-500/10">
-                    <Upload className="h-8 w-8 text-purple-500" />
+                  <div className="mb-3 md:mb-4 flex h-12 w-12 md:h-16 md:w-16 items-center justify-center rounded-full bg-purple-500/10">
+                    <Upload className="h-6 w-6 md:h-8 md:w-8 text-purple-500" />
                   </div>
-                  <p className="text-lg font-medium">
+                  <p className="text-base md:text-lg font-medium">
                     {isDragActive ? "Drop files here" : "Drag & drop files here"}
                   </p>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    or click to browse
+                  <p className="mt-1 text-xs md:text-sm text-muted-foreground">
+                    or tap to browse
                   </p>
-                  <div className="mt-4 flex gap-2">
-                    <Badge variant="secondary" className="gap-1">
+                  <div className="mt-3 md:mt-4 flex flex-wrap justify-center gap-2">
+                    <Badge variant="secondary" className="gap-1 text-xs">
                       <ImageIcon className="h-3 w-3" />
-                      {imageCount}/{MAX_IMAGES} images
+                      {imageCount}/{MAX_IMAGES}
                     </Badge>
-                    <Badge variant="secondary" className="gap-1">
+                    <Badge variant="secondary" className="gap-1 text-xs">
                       <File className="h-3 w-3" />
-                      {pdfCount}/{MAX_PDFS} PDFs
+                      {pdfCount}/{MAX_PDFS}
                     </Badge>
                   </div>
                 </motion.div>
               </div>
 
-              {/* File List */}
+              {/* File List - Mobile optimized */}
               <AnimatePresence mode="popLayout">
                 {files.length > 0 && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="space-y-3"
+                    className="space-y-2 md:space-y-3"
                   >
                     {files.map((file, index) => (
                       <motion.div
@@ -275,67 +262,72 @@ export default function UploadPage() {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 20 }}
                         transition={{ delay: index * 0.05 }}
-                        className="flex items-center gap-4 rounded-lg border border-border p-3"
+                        className="rounded-lg border border-border p-2.5 md:p-3"
                       >
-                        {/* Preview */}
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-muted overflow-hidden">
-                          {file.type === "image" && file.preview ? (
-                            <img
-                              src={file.preview}
-                              alt={file.file.name}
-                              className="h-full w-full rounded-lg object-cover"
-                            />
-                          ) : file.type === "pdf" ? (
-                            <FileText className="h-6 w-6 text-red-500" />
-                          ) : (
-                            <FileImage className="h-6 w-6 text-blue-500" />
+                        {/* Mobile: Stack layout / Desktop: Row layout */}
+                        <div className="flex items-center gap-2 md:gap-4">
+                          {/* Preview */}
+                          <div className="flex h-10 w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-lg bg-muted overflow-hidden">
+                            {file.type === "image" && file.preview ? (
+                              <img
+                                src={file.preview}
+                                alt={file.file.name}
+                                className="h-full w-full rounded-lg object-cover"
+                              />
+                            ) : file.type === "pdf" ? (
+                              <FileText className="h-5 w-5 md:h-6 md:w-6 text-red-500" />
+                            ) : (
+                              <FileImage className="h-5 w-5 md:h-6 md:w-6 text-blue-500" />
+                            )}
+                          </div>
+
+                          {/* File Info - Flexible width */}
+                          <div className="flex-1 min-w-0 overflow-hidden">
+                            <p className="text-xs md:text-sm font-medium truncate">{file.file.name}</p>
+                            <p className="text-[10px] md:text-xs text-muted-foreground">
+                              {(file.file.size / 1024).toFixed(1)} KB
+                            </p>
+                          </div>
+
+                          {/* Status Badge */}
+                          <div className="shrink-0">
+                            {file.status === "pending" && (
+                              <Badge variant="secondary" className="text-[10px] md:text-xs px-1.5 md:px-2 py-0.5">
+                                Pending
+                              </Badge>
+                            )}
+                            {file.status === "processing" && (
+                              <Badge variant="default" className="gap-1 text-[10px] md:text-xs px-1.5 md:px-2 py-0.5">
+                                <Loader2 className="h-2.5 w-2.5 md:h-3 md:w-3 animate-spin" />
+                                <span className="hidden sm:inline">Analyzing</span>
+                              </Badge>
+                            )}
+                            {file.status === "completed" && (
+                              <Badge variant="success" className="gap-1 text-[10px] md:text-xs px-1.5 md:px-2 py-0.5">
+                                <CheckCircle2 className="h-2.5 w-2.5 md:h-3 md:w-3" />
+                                <span className="hidden sm:inline">Done</span>
+                              </Badge>
+                            )}
+                            {file.status === "error" && (
+                              <Badge variant="error" className="gap-1 text-[10px] md:text-xs px-1.5 md:px-2 py-0.5">
+                                <AlertCircle className="h-2.5 w-2.5 md:h-3 md:w-3" />
+                                <span className="hidden sm:inline">Error</span>
+                              </Badge>
+                            )}
+                          </div>
+
+                          {/* Remove Button */}
+                          {!isExtracting && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => removeFile(file.id)}
+                              className="shrink-0 h-7 w-7 md:h-8 md:w-8"
+                            >
+                              <X className="h-3.5 w-3.5 md:h-4 md:w-4" />
+                            </Button>
                           )}
                         </div>
-
-                        {/* File Info */}
-                        <div className="flex-1 min-w-0">
-                          <p className="truncate font-medium">{file.file.name}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {(file.file.size / 1024).toFixed(1)} KB
-                          </p>
-                        </div>
-
-                        {/* Status */}
-                        <div className="flex items-center gap-2">
-                          {file.status === "pending" && (
-                            <Badge variant="secondary">Pending</Badge>
-                          )}
-                          {file.status === "processing" && (
-                            <Badge variant="default" className="gap-1">
-                              <Loader2 className="h-3 w-3 animate-spin" />
-                              Analyzing...
-                            </Badge>
-                          )}
-                          {file.status === "completed" && (
-                            <Badge variant="success" className="gap-1">
-                              <CheckCircle2 className="h-3 w-3" />
-                              Done
-                            </Badge>
-                          )}
-                          {file.status === "error" && (
-                            <Badge variant="error" className="gap-1">
-                              <AlertCircle className="h-3 w-3" />
-                              Error
-                            </Badge>
-                          )}
-                        </div>
-
-                        {/* Remove Button */}
-                        {!isExtracting && (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => removeFile(file.id)}
-                            className="shrink-0"
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                        )}
                       </motion.div>
                     ))}
                   </motion.div>
@@ -347,9 +339,9 @@ export default function UploadPage() {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="rounded-lg border border-red-500/50 bg-red-500/10 p-3"
+                  className="rounded-lg border border-red-500/50 bg-red-500/10 p-2.5 md:p-3"
                 >
-                  <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+                  <p className="text-xs md:text-sm text-red-600 dark:text-red-400">{error}</p>
                 </motion.div>
               )}
 
@@ -360,28 +352,28 @@ export default function UploadPage() {
                   animate={{ opacity: 1 }}
                   className="space-y-2"
                 >
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between text-xs md:text-sm">
                     <span className="text-muted-foreground">
-                      Analyzing with Xscade AI...
+                      Analyzing...
                     </span>
                     <span className="font-medium">{Math.round(extractionProgress)}%</span>
                   </div>
-                  <Progress value={extractionProgress} />
+                  <Progress value={extractionProgress} className="h-2" />
                 </motion.div>
               )}
 
               {/* Actions */}
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
                 <Button
                   variant="wednesday"
                   onClick={handleExtract}
                   disabled={files.length === 0 || isExtracting}
-                  className="flex-1"
+                  className="flex-1 h-11 md:h-10 text-sm"
                 >
                   {isExtracting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Analyzing with Xscade AI...
+                      Analyzing...
                     </>
                   ) : (
                     <>
@@ -394,6 +386,7 @@ export default function UploadPage() {
                   <Button
                     variant="outline"
                     onClick={() => router.push("/dashboard/table")}
+                    className="h-11 md:h-10 text-sm"
                   >
                     View Results
                   </Button>
@@ -401,13 +394,40 @@ export default function UploadPage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Extraction Results - Show on mobile after upload area */}
+          {(extractedCount > 0 || skippedCount > 0) && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="lg:hidden"
+            >
+              <Card className="border-green-500/50 bg-green-500/5">
+                <CardContent className="p-4 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500/10">
+                    <CheckCircle2 className="h-5 w-5 text-green-500" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-xl font-bold text-green-600">
+                      {extractedCount} <span className="text-sm font-normal">saved</span>
+                    </p>
+                    {skippedCount > 0 && (
+                      <p className="text-xs text-muted-foreground">
+                        {skippedCount} duplicate{skippedCount > 1 ? 's' : ''} skipped
+                      </p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
         </div>
 
-        {/* Info Panel */}
-        <div className="space-y-6">
+        {/* Info Panel - Hidden on mobile, visible on desktop */}
+        <div className="hidden lg:block space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>How It Works</CardTitle>
+              <CardTitle className="text-base">How It Works</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {[
@@ -423,12 +443,12 @@ export default function UploadPage() {
                   transition={{ delay: index * 0.1 }}
                   className="flex gap-3"
                 >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-purple-500/10 text-sm font-bold text-purple-600">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-purple-500/10 text-xs font-bold text-purple-600">
                     {item.step}
                   </div>
                   <div>
-                    <p className="font-medium">{item.title}</p>
-                    <p className="text-sm text-muted-foreground">{item.desc}</p>
+                    <p className="text-sm font-medium">{item.title}</p>
+                    <p className="text-xs text-muted-foreground">{item.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -470,26 +490,26 @@ export default function UploadPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Supported Formats</CardTitle>
+              <CardTitle className="text-base">Supported Formats</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
-                    <FileImage className="h-5 w-5 text-blue-500" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10">
+                    <FileImage className="h-4 w-4 text-blue-500" />
                   </div>
                   <div>
-                    <p className="font-medium">Images</p>
-                    <p className="text-sm text-muted-foreground">PNG, JPG, JPEG</p>
+                    <p className="text-sm font-medium">Images</p>
+                    <p className="text-xs text-muted-foreground">PNG, JPG, JPEG</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-500/10">
-                    <FileText className="h-5 w-5 text-red-500" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-500/10">
+                    <FileText className="h-4 w-4 text-red-500" />
                   </div>
                   <div>
-                    <p className="font-medium">Documents</p>
-                    <p className="text-sm text-muted-foreground">PDF files</p>
+                    <p className="text-sm font-medium">Documents</p>
+                    <p className="text-xs text-muted-foreground">PDF files</p>
                   </div>
                 </div>
               </div>
@@ -498,13 +518,13 @@ export default function UploadPage() {
 
           <Card className="border-purple-500/20">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-purple-500" />
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Sparkles className="h-4 w-4 text-purple-500" />
                 Powered by Xscade
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 Using Xscade&apos;s Medical Grade AI model for accurate medical document analysis and lab parameter extraction.
               </p>
             </CardContent>
